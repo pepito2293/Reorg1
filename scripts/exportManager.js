@@ -4,25 +4,41 @@ import { jsPDF } from "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.
 import JSZip from "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";
 
 export async function downloadCardsAsPDF(cards, backCardImage) {
-  const pdf = new jsPDF("portrait", "mm", "a4");
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  const pageHeight = pdf.internal.pageSize.getHeight();
-  const cardSize = 85.53;
+    const pdf = new jsPDF("portrait", "mm", "a4");
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const cardSize = 85.53;
 
-  let currentCardIndex = 0;
+    let currentCardIndex = 0;
 
-  for (const card of cards) {
-    const canvas = await html2canvas(card, { scale: 2 });
-    const imgData = canvas.toDataURL("image/png");
+    for (const card of cards) {
+        const canvas = await html2canvas(card, { scale: 2 });
+        const imgData = canvas.toDataURL("image/png");
 
-    const x = (currentCardIndex % 2) * (cardSize + 5);
-    const y = Math.floor(currentCardIndex / 2) * (cardSize + 5);
+        const x = (currentCardIndex % 2) * (cardSize + 5);
+        const y = Math.floor(currentCardIndex / 2) * (cardSize + 5);
 
-    pdf.addImage(imgData, "PNG", x, y, cardSize, cardSize);
+        pdf.addImage(imgData, "PNG", x, y, cardSize, cardSize);
 
-    currentCardIndex++;
-    if (currentCardIndex % 6 === 0) pdf.addPage();
-  }
+        currentCardIndex++;
+        if (currentCardIndex % 6 === 0) pdf.addPage();
+    }
 
-  pdf.save("dobble_cards.pdf");
+    pdf.save("dobble_cards.pdf");
+}
+
+export async function exportCardsAsZip(cards) {
+    const zip = new JSZip();
+    const folder = zip.folder("Cartes_Dobble");
+
+    for (let i = 0; i < cards.length; i++) {
+        const canvas = await html2canvas(cards[i], { scale: 2 });
+        const imgData = canvas.toDataURL("image/png");
+        folder.file(`carte_dobble_${i + 1}.png`, imgData.split(",")[1], { base64: true });
+    }
+
+    zip.generateAsync({ type: "blob" }).then((content) => {
+        saveAs(content, "cartes_dobble.zip");
+        alert("Les cartes ont été téléchargées en tant que fichier ZIP !");
+    });
 }
