@@ -27,3 +27,28 @@ export function generateDobbleCards(emojiList) {
 
   return cards.slice(0, 55);
 }
+
+// Fonction pour afficher les cartes
+export function displayCards(cards) {
+  const cardContainer = document.getElementById("cardContainer");
+  if (!cardContainer) {
+    console.error("❌ Erreur : Élément #cardContainer non trouvé.");
+    return;
+  }
+
+  cardContainer.innerHTML = ""; // Nettoyage du contenu précédent
+
+  cards.forEach(cardData => {
+    const cardDiv = document.createElement("div");
+    cardDiv.className = "card";
+
+    cardData.forEach(symbol => {
+      const symbolDiv = document.createElement("div");
+      symbolDiv.className = "symbol";
+      symbolDiv.textContent = symbol;  // Affichage de l'émoji ou du symbole
+      cardDiv.appendChild(symbolDiv);
+    });
+
+    cardContainer.appendChild(cardDiv);
+  });
+}
