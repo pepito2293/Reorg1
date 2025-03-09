@@ -26,8 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
     displayCards(emojiList);
 
     document.getElementById("generateCardsBtn").addEventListener("click", () => {
-        displayCards(emojiList);
+        displayCards(emojiList);  // ✅ Paramètre ajouté
     });
+});
+
 
     document.getElementById("downloadPDFBtn").addEventListener("click", () => {
         downloadCardsAsPDF();
