@@ -2,6 +2,11 @@
 // dobble.js - Génération et affichage des cartes Dobble
 
 export function generateDobbleCards(emojiList) {
+    if (!emojiList || emojiList.length < 8) {
+        console.error("Erreur : Liste d'émojis insuffisante pour générer les cartes.");
+        return [];
+    }
+
     const n = 7; 
     const totalSymbols = n * n + n + 1;
     const symbols = emojiList.slice(0, totalSymbols);
@@ -28,6 +33,7 @@ export function generateDobbleCards(emojiList) {
 
     return cards.slice(0, 55);
 }
+
 
 export function displayCards(emojiList) {
     const cardContainer = document.getElementById("cardContainer");
